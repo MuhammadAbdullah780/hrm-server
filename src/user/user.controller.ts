@@ -1,16 +1,25 @@
-import { Controller, Post } from '@nestjs/common';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { CreateUserCommand } from './commands/impl/create-user.command';
+import {
+  Body,
+  Controller,
+  Post,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import { CreateUserDto } from './dto/create-user';
+import { CreateUserHandler } from './handlers/create-user.handler';
+import { JwtGuard } from 'src/shared/guards/jwt.guard';
 
 @Controller()
 export class UserController {
   constructor(
-    private readonly commandBus: CommandBus,
-    private readonly queryBus: QueryBus,
+    // Handlers
+    private readonly createUserHandler: CreateUserHandler,
   ) {}
 
+  @UseGuards(JwtGuard)
   @Post('/create')
-  async createUser() {
-    return await this.commandBus?.execute(new CreateUserCommand({}));
+  async createUser(@Body() body: CreateUserDto) {
+    return await this.createUserHandler?.handle(body);
   }
 }
