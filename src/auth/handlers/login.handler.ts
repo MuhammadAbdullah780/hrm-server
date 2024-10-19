@@ -4,15 +4,16 @@ import { LoginDto } from '../dto/login.dto';
 import { UserService } from 'src/user/user.service';
 import { AppException } from 'src/shared/exceptions/app-exception';
 import { AuthService } from '../auth.service';
+import { z } from 'zod';
 
 @Injectable()
-export class LoginHandler implements IHandler<LoginDto> {
+export class LoginHandler implements IHandler<z.infer<typeof LoginDto>> {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,
   ) {}
 
-  async handle(arg: LoginDto) {
+  async handle(arg: z.infer<typeof LoginDto>) {
     const { email, password } = arg;
 
     // Check for email existance

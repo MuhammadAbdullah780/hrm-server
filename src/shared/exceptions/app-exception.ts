@@ -5,11 +5,13 @@ export class AppException extends HttpException {
     msg,
     code = HttpStatus.NOT_FOUND,
     isSuccess = false,
+    details,
   }: {
     isSuccess?: boolean;
     msg: string;
     code?: HttpStatus;
+    details?: Record<string, any>;
   }) {
-    super({ isSuccess, message: msg }, code);
+    super({ isSuccess, message: msg, details, status: code }, code);
   }
 }

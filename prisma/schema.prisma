@@ -49,6 +49,12 @@ enum EmpStatus {
   TEMPORARY
 }
 
+enum AccountStatus {
+  ACTIVE
+  IN_ACTIVE
+  DEACTIVATED
+}
+
 // ============ NESTED FIELDS IN MODEL =============== //
 type Education {
   degree      Degree?
@@ -90,19 +96,40 @@ model User {
   gender            Gender?
   profile_picture   String?            @db.String
   phone_number      String?            @db.String
-  country           String?            @db.String
-  city              String?            @db.String
-  street_address    String?            @db.String
+  address           String?            @db.String
   job_title         String?
-  is_deactivated    Boolean?           @default(false)
   education         Education[]
   experience        Experience[]
   employment_type   EmploymentType[]
   employment_status EmploymentStatus[]
   work_hours        Int                @default(8) @db.Int
   work_type         WorkType
+  creation_date     DateTime           @default(now())
+  account_status    AccountStatus
 
+  // @@index([id])
   @@map("users")
+}
+
+model Admins {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  phone_number    String?
+  creation_date   DateTime      @default(now())
+  account_status  AccountStatus
+  last_login      DateTime?
+  email           String
+  profile_picture String?
+  gender          Gender?
+  birth_date      DateTime?
+  address         String?
+
+  // Self relation
+  created_by     Admins?  @relation("admin_created_by", fields: [created_by_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  created_by_id  String?  @db.ObjectId
+  created_admins Admins[] @relation("admin_created_by")
+
+  @@map("admins")
 }
 
 model Roles {

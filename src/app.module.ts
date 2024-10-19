@@ -11,6 +11,8 @@ import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
+import { AdminsModule } from './admins/admins.module';
+import { AccessManagerModule } from './access-manager/access-manager.module';
 
 @Module({
   imports: [
@@ -25,6 +27,7 @@ import { JwtModule } from '@nestjs/jwt';
 
     //
     // MongooseModule.forRoot(process?.env?.DB_URI),
+    JwtModule,
 
     /**
      * Modules
@@ -34,6 +37,8 @@ import { JwtModule } from '@nestjs/jwt';
     MeModule,
     DbModule,
     AuthModule,
+    AdminsModule,
+    AccessManagerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
