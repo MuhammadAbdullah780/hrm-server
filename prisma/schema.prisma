@@ -123,11 +123,12 @@ model Admins {
   gender          Gender?
   birth_date      DateTime?
   address         String?
+  password        String
 
-  // Self relation
-  created_by     Admins?  @relation("admin_created_by", fields: [created_by_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  created_by_id  String?  @db.ObjectId
-  created_admins Admins[] @relation("admin_created_by")
+  // // Self relation
+  // created_by     Admins?  @relation("admin_created_by", fields: [created_by_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  // created_by_id  String?  @db.ObjectId
+  // created_admins Admins[] @relation("admin_created_by")
 
   @@map("admins")
 }

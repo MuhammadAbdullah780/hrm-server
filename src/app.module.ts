@@ -13,6 +13,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
 import { AdminsModule } from './admins/admins.module';
 import { AccessManagerModule } from './access-manager/access-manager.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { AccessManagerModule } from './access-manager/access-manager.module';
     AuthModule,
     AdminsModule,
     AccessManagerModule,
+    PrismaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

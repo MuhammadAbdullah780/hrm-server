@@ -5,9 +5,10 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtGuard } from 'src/shared/guards/jwt.guard';
+import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
-  imports: [JwtModule],
+  imports: [JwtModule, PrismaModule],
   controllers: [UserController],
   providers: [
     // {

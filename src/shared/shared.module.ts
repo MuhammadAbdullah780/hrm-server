@@ -2,12 +2,12 @@ import { Global, Module } from '@nestjs/common';
 import { JwtGuard } from './guards/jwt.guard';
 import { JwtModule } from '@nestjs/jwt';
 import { UserModule } from 'src/user/user.module';
-import { PrismaService } from './services/prisma.service';
+// import { PrismaService } from './services/prisma.service';
 
 @Global()
 @Module({
   imports: [JwtModule, UserModule],
-  providers: [JwtGuard, PrismaService],
-  exports: [PrismaService],
+  providers: [JwtGuard],
+  exports: [],
 })
 export class SharedModule {}
