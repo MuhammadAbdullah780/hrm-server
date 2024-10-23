@@ -1,5 +1,10 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { RouterModule } from '@nestjs/core';
+import { JwtModule } from '@nestjs/jwt';
+import { MongooseModule } from '@nestjs/mongoose';
+import { AccessManagerModule } from './access-manager/access-manager.module';
+import { AdminsModule } from './admins/admins.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
@@ -8,12 +13,6 @@ import { MeModule } from './me/me.module';
 import { appRoutes } from './shared/config/routes';
 import { SharedModule } from './shared/shared.module';
 import { UserModule } from './user/user.module';
-import { ConfigModule } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
-import { JwtModule } from '@nestjs/jwt';
-import { AdminsModule } from './admins/admins.module';
-import { AccessManagerModule } from './access-manager/access-manager.module';
-import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
@@ -27,7 +26,11 @@ import { PrismaModule } from './prisma/prisma.module';
     }),
 
     //
-    // MongooseModule.forRoot(process?.env?.DB_URI),
+    MongooseModule.forRoot(
+      'mongodb+srv://ma0401431:z6S3t53tE3kWVYa2@cluster0.ihhcazn.mongodb.net/hrm-dev-db?retryWrites=true&w=majority&appName=Cluster0',
+    ),
+
+    //
     JwtModule,
 
     /**
@@ -40,7 +43,6 @@ import { PrismaModule } from './prisma/prisma.module';
     AuthModule,
     AdminsModule,
     AccessManagerModule,
-    PrismaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

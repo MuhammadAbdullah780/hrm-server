@@ -5,10 +5,22 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtGuard } from 'src/shared/guards/jwt.guard';
-import { PrismaModule } from 'src/prisma/prisma.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { User, UserSchema } from 'src/db/models/user';
 
 @Module({
-  imports: [JwtModule, PrismaModule],
+  imports: [
+    //
+    MongooseModule.forFeature([
+      {
+        name: User.name,
+        schema: UserSchema,
+      },
+    ]),
+
+    //
+    JwtModule,
+  ],
   controllers: [UserController],
   providers: [
     // {

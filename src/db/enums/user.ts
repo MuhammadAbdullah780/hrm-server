@@ -78,12 +78,7 @@ export enum JobRoles {
   CloudEngineer = 'Cloud Engineer',
 }
 
-export enum Gender {
-  MALE = 'Male',
-  FEMALE = 'Female',
-}
-
-export enum WorkSide {
+export enum WorkType {
   REMOTE = 'Remote',
   ON_SITE = 'On Site',
   HYBRID = 'Hybrid',

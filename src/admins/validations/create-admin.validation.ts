@@ -1,4 +1,4 @@
-import { Gender, AccountStatus } from '@prisma/client';
+import { AccountStatus, Gender } from 'src/db/enums/shared';
 import { z } from 'zod';
 
 export const createAdminValidationSchema = z.object({
