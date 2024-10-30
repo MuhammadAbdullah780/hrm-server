@@ -1,14 +1,13 @@
-import { Body, Controller, Post, UseGuards, UsePipes } from '@nestjs/common';
+import { Body, Controller, Post, UsePipes } from '@nestjs/common';
 import { Claims } from 'src/shared/decorators/claims.decorator';
 import { IsRestrictedToUser } from 'src/shared/decorators/is-restricted-to-user.decorator';
 import { AccountType } from 'src/shared/decorators/set-account-type.decorator';
 import { AccountTypeEnum } from 'src/shared/enums/account-type';
 import { AppClaimsEnum } from 'src/shared/enums/app-claims';
-import { JwtGuard } from 'src/shared/guards/jwt.guard';
 import { ZodValidationPipe } from 'src/shared/pipes/zod.pipe';
+import { CreateAdminHandler } from './handlers/create-admin.handler';
 import { CreateAdminDto } from './typings';
 import { createAdminValidationSchema } from './validations/create-admin.validation';
-import { CreateAdminHandler } from './handlers/create-admin.handler';
 
 @Controller()
 @AccountType(AccountTypeEnum.ADMIN)
@@ -28,4 +27,12 @@ export class AdminsController {
   async createNewAdmin(@Body() body: CreateAdminDto) {
     return await this.createAdminHandler?.handle(body);
   }
+
+  async bulkEdit() {}
+
+  async deleteSpecificAdmin() {}
+
+  async getSpecificAdmin() {}
+
+  async getAdminsListing() {}
 }

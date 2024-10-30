@@ -1,6 +1,6 @@
 import { Body, Controller, Post, UsePipes } from '@nestjs/common';
 import { ZodValidationPipe } from 'src/shared/pipes/zod.pipe';
-import { loginValidationSchema } from './dto/login.dto';
+import { loginValidationSchema } from './validations/login';
 import { LoginHandler } from './handlers/login.handler';
 import { RefereshTokenHandler } from './handlers/referesh-token.handler';
 import { LoginDto } from './typings';

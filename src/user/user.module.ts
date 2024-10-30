@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { MongooseModule } from '@nestjs/mongoose';
+import { User, UserSchema } from 'src/db/models/user';
 import { UserHandlers } from './handlers';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtGuard } from 'src/shared/guards/jwt.guard';
-import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from 'src/db/models/user';
 
 @Module({
   imports: [
@@ -22,14 +20,7 @@ import { User, UserSchema } from 'src/db/models/user';
     JwtModule,
   ],
   controllers: [UserController],
-  providers: [
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: JwtGuard,
-    // },
-    UserService,
-    ...UserHandlers,
-  ],
+  providers: [UserService, ...UserHandlers],
   exports: [UserService],
 })
 export class UserModule {}

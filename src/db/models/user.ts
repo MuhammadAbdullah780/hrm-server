@@ -126,16 +126,19 @@ export class User {
   employment_status?: EmploymentStatus[];
 
   @Prop({ default: 8 })
-  work_hours: number;
+  work_hours?: number;
 
   @Prop({ type: String, enum: WorkType, default: WorkType.ON_SITE })
-  work_type: string;
+  work_type?: string;
 
   @Prop({ type: Date, default: new Date() })
-  creation_date: Date;
+  creation_date?: Date;
 
   @Prop({ type: String, enum: AccountStatus, default: AccountStatus.ACTIVE })
-  account_status: AccountStatus;
+  account_status?: AccountStatus;
+
+  @Prop({ type: Date })
+  last_login?: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { AggregateOptions, Model, PipelineStage } from 'mongoose';
+import { makeQueryPaginated } from 'src/db/functions/make-query-paginated';
 import { User } from 'src/db/models/user';
 import { DbModels } from 'src/db/typings';
+import { getUserListingQuery } from './query/get-listing';
+import { CreateUserDto } from './typings';
+import { AccountStatus } from 'src/db/enums/shared';
 
 @Injectable()
 export class UserService {
@@ -12,22 +16,13 @@ export class UserService {
   ) {}
 
   async isEmailExists(email: string) {
-    return Boolean();
-    // await this.db?.user?.count({
-    //   where: {
-    //     email,
-    //   },
-    // }),
+    const isExists = await this?.model?.countDocuments({ email });
+    return Boolean(isExists);
   }
 
-  async createNewUser(doc: any) {
-    // const data = await this.db?.user?.create({
-    //   data: doc,
-    // });
-    // return data;
+  async createNewUser(doc: CreateUserDto) {
+    return await this?.model?.create(doc);
   }
-
-  async validateNewUserConditions() {}
 
   async getUserByEmail(email: string) {
     const data = await this?.model
@@ -40,6 +35,102 @@ export class UserService {
 
   async getUserThroughId(id: string) {
     return (await this?.model?.findById(id)?.lean(true)) as DbModels.IUser;
-    // return await this.db?.user?.findFirst({ where: { id } });
+  }
+
+  async deleteBulkUsers(ids: string[]) {
+    return await this?.model?.deleteMany({
+      _id: { $in: ids },
+    });
+  }
+
+  async getUsersWithFiltersAndPagination() {
+    // extending pagination functionality
+    const paginatedQuery = makeQueryPaginated({
+      query: getUserListingQuery(),
+    });
+
+    //
+    return await this?.model?.aggregate(paginatedQuery);
+  }
+
+  async deActivateBulkAccounts({ users }: { users: string[] }) {
+    return await this.model.updateMany(
+      {
+        $and: [
+          // filter throug users
+          {
+            _id: { $in: users },
+          },
+          // check if it is already deactivated
+          {
+            account_status: { $ne: AccountStatus.DE_ACTIVATED },
+          },
+        ],
+      },
+      {
+        //
+        $set: {
+          account_status: AccountStatus.DE_ACTIVATED,
+        },
+      },
+    );
+  }
+
+  async assignJobTitleToBulkUsers({
+    job_title,
+    users,
+  }: {
+    users: string[];
+    job_title: string;
+  }) {
+    return await this.model?.updateMany(
+      {
+        $and: [
+          {
+            _id: { $in: users },
+            job_title: { $ne: job_title },
+          },
+          { job_title },
+        ],
+      },
+      {},
+    );
+  }
+
+  async assignEmpStatusToBulkUsers({
+    users,
+    emp_status,
+  }: {
+    users: string[];
+    emp_status: string;
+  }) {
+    return await this.model?.updateMany(
+      //
+      {
+        _id: { $in: users },
+        'employment_status.title': emp_status,
+      },
+      //
+      {
+        $set: {
+          'employment_status.$[elem].title': emp_status,
+        },
+      },
+      //
+      {
+        arrayFilters: [
+          {
+            elem: { $eq: { $last: '$employment_status' } },
+          },
+        ],
+      },
+    );
+  }
+
+  async applyAggregation(
+    query: PipelineStage[],
+    options: AggregateOptions = {},
+  ) {
+    return await this.model?.aggregate(query, options);
   }
 }

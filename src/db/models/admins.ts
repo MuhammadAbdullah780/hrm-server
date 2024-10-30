@@ -1,5 +1,4 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, HydratedDocument } from 'mongoose';
 import { DEFAULT_MODEL_OPTIONS, REQUIRED_FIELD_MSG } from '../constants';
 import { AccountStatus, Gender } from '../enums/shared';
 
@@ -37,6 +36,9 @@ export class Admin {
 
   @Prop({ type: String, required: [true, REQUIRED_FIELD_MSG] })
   password: string;
+
+  @Prop({ type: Boolean, default: false })
+  is_super_admin: boolean;
 }
 
 export const AdminSchema = SchemaFactory.createForClass(Admin);
